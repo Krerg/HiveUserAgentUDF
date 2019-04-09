@@ -11,10 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * UDTF to get is, device and browser names from User-Agent string
+ */
 public class UserAgentUDTF extends GenericUDTF {
 
     private PrimitiveObjectInspector stringOI = null;
 
+    /**
+     * Init method to get info about result fields.
+     * @param argOIs input argument info
+     * @return 3 structured string inspectors
+     * @throws UDFArgumentException
+     */
     @Override
     public StructObjectInspector initialize(StructObjectInspector argOIs) throws UDFArgumentException {
         List<? extends StructField> fields = argOIs.getAllStructFieldRefs();
@@ -35,6 +44,11 @@ public class UserAgentUDTF extends GenericUDTF {
         return ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames, fieldsOIs);
     }
 
+    /**
+     * Gets the device, os, browser and forward the, to hive.
+     * @param args input to process, should be length of 1 string
+     * @throws HiveException
+     */
     @Override
     public void process(Object[] args) throws HiveException {
         String userAgentInput = stringOI.getPrimitiveJavaObject(args[0]).toString();
